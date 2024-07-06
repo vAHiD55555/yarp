@@ -46,6 +46,7 @@ set(YARP_dev_HDRS
   yarp/dev/IControlMode.h
   yarp/dev/ICurrentControl.h
   yarp/dev/IDepthVisualParams.h
+  yarp/dev/IDeviceDriverParams.h
   yarp/dev/IEncoders.h
   yarp/dev/IEncodersTimed.h
   yarp/dev/IFrameGrabberControls.h
@@ -58,6 +59,7 @@ set(YARP_dev_HDRS
   yarp/dev/IHapticDevice.h
   yarp/dev/IImpedanceControl.h
   yarp/dev/IInteractionMode.h
+  yarp/dev/IJointCoupling.h
   yarp/dev/IJoypadController.h
   yarp/dev/IJointFault.h
   yarp/dev/ILLM.h
@@ -94,6 +96,7 @@ set(YARP_dev_HDRS
   yarp/dev/ImplementEncodersTimed.h
   yarp/dev/ImplementImpedanceControl.h
   yarp/dev/ImplementInteractionMode.h
+  yarp/dev/ImplementJointCoupling.h
   yarp/dev/ImplementJointFault.h
   yarp/dev/ImplementMotor.h
   yarp/dev/ImplementMotorEncoders.h
@@ -116,6 +119,7 @@ set(YARP_dev_HDRS
   yarp/dev/ServiceInterfaces.h
   yarp/dev/WrapperMultiple.h
   yarp/dev/WrapperSingle.h
+  yarp/dev/testInterfaces/IFakeDeviceInterfaceTest.h
 )
 
 if(TARGET YARP::YARP_math)
@@ -173,6 +177,7 @@ set(YARP_dev_SRCS
   yarp/dev/IBattery.cpp
   yarp/dev/IChatBot.cpp
   yarp/dev/IDepthVisualParams.cpp
+  yarp/dev/IDeviceDriverParams.cpp
   yarp/dev/IFrameGrabberControls.cpp
   yarp/dev/IFrameGrabberControlsDC1394.cpp
   yarp/dev/IFrameGrabberImage.cpp
@@ -203,6 +208,7 @@ set(YARP_dev_SRCS
   yarp/dev/ImplementEncodersTimed.cpp
   yarp/dev/ImplementImpedanceControl.cpp
   yarp/dev/ImplementInteractionMode.cpp
+  yarp/dev/ImplementJointCoupling.cpp
   yarp/dev/ImplementJointFault.cpp
   yarp/dev/ImplementMotor.cpp
   yarp/dev/ImplementMotorEncoders.cpp
@@ -223,6 +229,7 @@ set(YARP_dev_SRCS
   yarp/dev/RGBDSensorParamParser.cpp
   yarp/dev/WrapperMultiple.cpp
   yarp/dev/WrapperSingle.cpp
+  yarp/dev/testInterfaces/IFakeDeviceInterfaceTest.cpp
 )
 
 if(TARGET YARP::YARP_math)
@@ -262,6 +269,7 @@ set(YARP_dev_IDL
   idl/MobileBaseVelocity.thrift
   idl/AudioPlayerStatus.thrift
   idl/AudioRecorderStatus.thrift
+  idl/LLM_Message.thrift
 )
 
 if(TARGET YARP::YARP_math)
@@ -399,118 +407,6 @@ set(YARP_dev_PRIVATE_DEPS ${YARP_dev_PRIVATE_DEPS} PARENT_SCOPE)
 
 ###################################################################
 
-add_library(YARP_dev_tests)
-add_library(YARP::YARP_dev_tests ALIAS YARP_dev_tests)
-
-set(YARP_dev_test_HDRS
-    yarp/dev/tests/IDummyTest.h
-    yarp/dev/tests/IPositionControlTest.h
-    yarp/dev/tests/ITorqueControlTest.h
-    yarp/dev/tests/IAxisInfoTest.h
-    yarp/dev/tests/IRGBDSensorTest.h
-    yarp/dev/tests/IBatteryTest.h
-    yarp/dev/tests/IJoypadControllerTest.h
-    yarp/dev/tests/ILLMTest.h
-    yarp/dev/tests/IChatBotTest.h
-)
-
-set(YARP_dev_test_SRCS
-    yarp/dev/tests/IDummyTest.cpp
-    yarp/dev/tests/IPositionControlTest.cpp
-    yarp/dev/tests/ITorqueControlTest.cpp
-    yarp/dev/tests/IAxisInfoTest.cpp
-    yarp/dev/tests/IRGBDSensorTest.cpp
-    yarp/dev/tests/IBatteryTest.cpp
-    yarp/dev/tests/IJoypadControllerTest.cpp
-    yarp/dev/tests/ILLMTest.cpp
-    yarp/dev/tests/IChatBotTest.cpp
-)
-
-if(TARGET YARP::YARP_math)
-  list(APPEND YARP_dev_test_HDRS
-      yarp/dev/tests/IFrameGrabberImageTest.h
-      yarp/dev/tests/IRgbVisualParamsTest.h
-      yarp/dev/tests/IFrameTransformTest.h
-      yarp/dev/tests/IMap2DTest.h
-      yarp/dev/tests/INavigation2DTest.h
-      yarp/dev/tests/IDummyTest.h
-      yarp/dev/tests/IRangefinder2DTest.h
-      yarp/dev/tests/IPositionControlTest.h
-      yarp/dev/tests/ITorqueControlTest.h
-      yarp/dev/tests/IAxisInfoTest.h
-      yarp/dev/tests/IPositionSensorsTest.h
-      yarp/dev/tests/IOrientationSensorsTest.h
-      yarp/dev/tests/IOdometry2DTest.h
-      yarp/dev/tests/IRGBDSensorTest.h
-      yarp/dev/tests/ILocalization2DTest.h
-      yarp/dev/tests/IFrameTransformStorageTest.h
-      )
-  list(APPEND YARP_dev_test_SRCS
-      yarp/dev/tests/IFrameGrabberImageTest.cpp
-      yarp/dev/tests/IRgbVisualParamsTest.cpp
-      yarp/dev/tests/IFrameTransformTest.cpp
-      yarp/dev/tests/INavigation2DTest.cpp
-      yarp/dev/tests/IDummyTest.cpp
-      yarp/dev/tests/IRangefinder2DTest.cpp
-      yarp/dev/tests/IPositionControlTest.cpp
-      yarp/dev/tests/ITorqueControlTest.cpp
-      yarp/dev/tests/IAxisInfoTest.cpp
-      yarp/dev/tests/IPositionSensorsTest.cpp
-      yarp/dev/tests/IOrientationSensorsTest.cpp
-      yarp/dev/tests/IOdometry2DTest.cpp
-      yarp/dev/tests/IRGBDSensorTest.cpp
-      yarp/dev/tests/IMap2DTest.cpp
-      yarp/dev/tests/ILocalization2DTest.cpp
-      yarp/dev/tests/IFrameTransformStorageTest.cpp
-      )
+if(YARP_COMPILE_TESTS)
+  add_subdirectory(yarp/dev/tests)
 endif()
-
-target_sources(YARP_dev_tests
-  PRIVATE
-    ${YARP_dev_test_SRCS}
-    ${YARP_dev_test_HDRS}
-)
-
-target_compile_definitions(YARP_dev_tests PUBLIC YARP_dev_EXPORTS=1)
-
-target_link_libraries (YARP_dev_tests
-  PRIVATE
-    YARP::YARP_dev
-    YARP::YARP_catch2)
-
-target_compile_features(YARP_dev_tests PRIVATE cxx_std_17)
-
-set_property (
-  TARGET YARP_dev_tests
-  PROPERTY FOLDER "Test"
-)
-
-set_property(
-  TARGET YARP_dev_tests
-  PROPERTY
-    PUBLIC_HEADER
-      ${YARP_dev_HDRS}
-      ${YARP_dev_test_HDRS}
-)
-
-set_property(TARGET YARP_dev_tests PROPERTY VERSION ${YARP_VERSION_SHORT})
-set_property(TARGET YARP_dev_tests PROPERTY SOVERSION ${YARP_SOVERSION})
-set_property(TARGET YARP_dev_tests PROPERTY FOLDER "Test")
-
- install(
-  TARGETS YARP_dev_tests
-  EXPORT YARP_dev_tests
-  RUNTIME
-    DESTINATION "${CMAKE_INSTALL_BINDIR}"
-    COMPONENT YARP_dev_tests
-  LIBRARY
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    COMPONENT YARP_dev_tests
-    NAMELINK_COMPONENT YARP_dev_tests-dev
-  ARCHIVE
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    COMPONENT YARP_dev_tests-dev
-  PUBLIC_HEADER
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/yarp/dev/tests"
-    COMPONENT YARP_dev_tests-dev
-)

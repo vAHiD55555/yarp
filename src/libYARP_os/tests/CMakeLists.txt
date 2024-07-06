@@ -8,6 +8,9 @@ add_executable(harness_os)
 target_sources(harness_os PRIVATE
   BinPortableTest.cpp
   BottleTest.cpp
+  ListCarriersTest.cpp
+  ListPluginsAndOpenTest.cpp
+  ListPluginsOnlyTest.cpp
   ContactTest.cpp
   ElectionTest.cpp
   EventTest.cpp
@@ -16,6 +19,7 @@ target_sources(harness_os PRIVATE
   LogTest.cpp
   MessageStackTest.cpp
   NetTypeTest.cpp
+  NetworkClockTest.cpp
   NetworkTest.cpp
   NodeTest.cpp
   PeriodicThreadTest.cpp

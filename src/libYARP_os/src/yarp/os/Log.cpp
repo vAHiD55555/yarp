@@ -441,7 +441,7 @@ inline void printable_output(std::ostream* ost,
     YARP_UNUSED(externaltime);
 
 #if !defined (_MSC_VER)
-    static constexpr const char* level_char = u8"\u25CF";
+    static constexpr const char level_char[] = "\u25cf";
 #else
     static constexpr const char* level_char = "*";
 #endif
@@ -748,7 +748,7 @@ void yarp::os::impl::LogPrivate::log(yarp::os::Log::LogType type,
                 buf_size = dyn_buf_size;
             }
 
-            auto p = std::min(log_line_size - 1, buf_size);
+            auto p = std::min<size_t>(log_line_size - 1, buf_size);
             if (log_line_size > 0 && p < buf_size && out[p] == '\n' && msg[strlen(msg) - 1] == '\n') {
                 yarp::os::Log(file, line, func, nullptr, log_internal_component).warning("Removing extra '\\n' (c-style)");
                 out[p] = 0;
@@ -928,7 +928,7 @@ yarp::os::Log::Log(const char* file,
                    const char* func,
                    const Predicate pred,
                    const LogComponent& comp) :
-        mPriv(new yarp::os::impl::LogPrivate(file, line, func, "", 0.0, pred, comp))
+        mPriv(std::make_unique<yarp::os::impl::LogPrivate>(file, line, func, "", 0.0, pred, comp))
 {
 }
 
@@ -939,7 +939,7 @@ yarp::os::Log::Log(const char* file,
                    std::string_view id,
                    const Predicate pred,
                    const LogComponent& comp) :
-        mPriv(new yarp::os::impl::LogPrivate(file, line, func, id.data(), 0.0, pred, comp))
+        mPriv(std::make_unique<yarp::os::impl::LogPrivate>(file, line, func, id.data(), 0.0, pred, comp))
 {
 }
 
@@ -950,7 +950,7 @@ yarp::os::Log::Log(const char* file,
                    const double externaltime,
                    const Predicate pred,
                    const LogComponent& comp) :
-        mPriv(new yarp::os::impl::LogPrivate(file, line, func, "", externaltime, pred, comp))
+        mPriv(std::make_unique<yarp::os::impl::LogPrivate>(file, line, func, "", externaltime, pred, comp))
 {
 }
 
@@ -963,18 +963,17 @@ yarp::os::Log::Log(const char* file,
                    const double externaltime,
                    const Predicate pred,
                    const LogComponent& comp) :
-        mPriv(new yarp::os::impl::LogPrivate(file, line, func, id.data(), externaltime, pred, comp))
+        mPriv(std::make_unique<yarp::os::impl::LogPrivate>(file, line, func, id.data(), externaltime, pred, comp))
 {
 }
 
 yarp::os::Log::Log() :
-        mPriv(new yarp::os::impl::LogPrivate(nullptr, 0, nullptr, nullptr, 0.0, nullptr, nullptr))
+        mPriv(std::make_unique<yarp::os::impl::LogPrivate>(nullptr, 0, nullptr, nullptr, 0.0, nullptr, nullptr))
 {
 }
 
 yarp::os::Log::~Log()
 {
-    delete mPriv;
 }
 
 void yarp::os::Log::do_log(yarp::os::Log::LogType type,
