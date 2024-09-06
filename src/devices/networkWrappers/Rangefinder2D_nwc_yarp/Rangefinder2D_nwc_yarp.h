@@ -13,19 +13,20 @@
 #include <yarp/dev/IRangefinder2D.h>
 #include <yarp/dev/ControlBoardInterfaces.h>
 #include <yarp/dev/ControlBoardHelpers.h>
-#include <yarp/dev/LaserScan2D.h>
+#include <yarp/sig/LaserScan2D.h>
 #include <yarp/sig/Vector.h>
 #include <yarp/os/Time.h>
 #include <yarp/dev/PolyDriver.h>
 
 #include <mutex>
 
+#include "IRangefinder2DMsgs.h"
 #include "Rangefinder2D_nwc_yarp_ParamsParser.h"
 
 class Rangefinder2DInputPortProcessor :
-        public yarp::os::BufferedPort<yarp::dev::LaserScan2D>
+        public yarp::os::BufferedPort<yarp::sig::LaserScan2D>
 {
-    yarp::dev::LaserScan2D lastScan;
+    yarp::sig::LaserScan2D lastScan;
     std::mutex mutex;
     yarp::os::Stamp lastStamp;
     double deltaT;
@@ -43,10 +44,10 @@ public:
 
     Rangefinder2DInputPortProcessor();
 
-    using yarp::os::BufferedPort<yarp::dev::LaserScan2D>::onRead;
-    void onRead(yarp::dev::LaserScan2D&v) override;
+    using yarp::os::BufferedPort<yarp::sig::LaserScan2D>::onRead;
+    void onRead(yarp::sig::LaserScan2D& v) override;
 
-    inline int getLast(yarp::dev::LaserScan2D &data, yarp::os::Stamp &stmp);
+    inline int getLast(yarp::sig::LaserScan2D& data, yarp::os::Stamp& stmp);
 
     inline int getIterations();
 
@@ -72,12 +73,15 @@ class Rangefinder2D_nwc_yarp:
 {
 protected:
     Rangefinder2DInputPortProcessor m_inputPort;
+    IRangefinder2DMsgs m_RPC;
+    std::mutex         m_mutex;
+
     yarp::os::Port m_rpcPort;
     yarp::os::Stamp m_lastTs;
     std::string m_deviceId;
 
-    double m_scan_angle_min;
-    double m_scan_angle_max;
+    double m_scan_angle_min = std::nan("1");
+    double m_scan_angle_max = std::nan("1");
     std::string m_laser_frame_name;
     std::string m_robot_frame_name;
 
@@ -87,7 +91,7 @@ public:
     bool close() override;
 
     /* IRangefinder2D methods */
-    bool getLaserMeasurement(std::vector<yarp::dev::LaserMeasurementData> &data, double* timestamp = nullptr) override;
+    bool getLaserMeasurement(std::vector<yarp::sig::LaserMeasurementData> &data, double* timestamp = nullptr) override;
     bool getRawData(yarp::sig::Vector &data, double* timestamp = nullptr) override;
     bool getDeviceStatus(Device_status &status) override;
     bool getDistanceRange(double& min, double& max) override;

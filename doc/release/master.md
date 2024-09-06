@@ -32,20 +32,29 @@ Fixes
 * `yarpbatterygui` now compatible with battery_nwc_yarp.
 * Fixed compilation of portmonitor carrier when a custom non-system swig is used
 * Fixed compatibility with ffmpeg 7 (https://github.com/robotology/yarp/pull/3109).
+* Fixed compilation with graphviz 10 (https://github.com/robotology/yarp/pull/3115).
+* Fix sending empty yarp::sig::Vector when building in Debug (https://github.com/robotology/yarp/pull/3123).
 
 New Features
 ------------
 
 * Added new command line tool `yarpDeviceParamParserGenerator`. See official yarp documentation (cmd_yarpDeviceParamParserGenerator.dox)
 
-* Added LLM_Message data type to propagate LLM answers
 
 #### Docker
 * Added two parameters to yarp `Dockerfile`:
   * `base_img` to allow starting from different parent images
   * `yarp_branch` to set the yarp version the users might need in their image
 
+### Carriers
+
+* Removed h264 Carrier
+* Added gstreamer carrier with extended functionalities.
+* Added new gstreamers plugins: yarpvideosource, yarpvidepassthrough, yarpvideosink
+
 ### Devices
+
+* Most yarp devices now use yarpDeviceParamParserGenerator to generate parameters documentation.
 
 #### controlboardremapper
 
@@ -55,3 +64,41 @@ New Features
 
 * Added new device `deviceBundler` which can be useful to open two devices and attach them while using a single yarpdev command line.
   See https://github.com/robotology/yarp/discussions/3078
+
+#### llmDevice
+
+* Added LLM_Message data type to propagate LLM answers
+* Added refreshConversation feature in the interface to allow users to restart the conversation mantaining the same prompt.
+
+#### Navigation2D
+
+* Added followPath functionality
+* Added paths as possible arguments in gotoLocation in Navigation2D_nwc
+
+#### Rangefinder2DTransformer
+
+* Removed deprecated device Rangerfinder2DClient
+* Added device Rangerfinder2DTransformer, with similar functionalities to Rangerfinder2DClient.
+
+#### Rangefinder2D_nwc_yarp, Rangefinder2D_nws_yarp
+
+* Network protocol now uses IDL thrift
+
+### GUIs
+
+#### yarpopencvdisplay
+
+* added new executable `yarpopencvdisplay`. Similarly to yarpview, it's a basic window to display video streams. It also allows to save to .avi files.
+
+### Libraries
+
+#### `lib_yarp_dev`
+
+* `Drivers.cpp` If the user requests for a not existing plugin, the system now prints a message suggesting devices with similar names
+* The following data types have been migrated from `yarp_dev` to `yarp_sig` library: `AudioPlayerStatus, AudioRecorderStatus, AudioBufferSize, AudioBufferSizeData, LaserMeasurementData, LaserScan2D`.
+
+#### `lib_yarp_sig`
+
+* Improvements to serialization class `yarp::sig::Sound` (breaking change)
+* yarp_sig can now use IDL thrift to generate custom data types.
+* The following data types have been migrated from `yarp_dev` to `yarp_sig` library: `AudioPlayerStatus, AudioRecorderStatus, AudioBufferSize, AudioBufferSizeData, LaserMeasurementData, LaserScan2D`.
