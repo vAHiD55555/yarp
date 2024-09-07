@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "bufferutil": "^4.0.1",
-    "jsdoc": "^3.6.4",
+    "jsdoc": "^4.0.3",
     "json-int64": "^1.0.0",
     "nopt": "^4.0.1"
   },
