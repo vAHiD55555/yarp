@@ -33,7 +33,7 @@
     "bufferutil": "^4.0.1",
     "jsdoc": "^3.6.4",
     "json-int64": "^1.0.0",
-    "nopt": "^4.0.1"
+    "nopt": "^4.0.3"
   },
   "types": "./thrift.d.ts"
 }
